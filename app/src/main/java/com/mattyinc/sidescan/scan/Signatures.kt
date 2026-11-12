@@ -51,9 +51,20 @@ object Signatures {
         "android.permission.RECEIVE_BOOT_COMPLETED" to "Starts itself on boot"
     )
 
-    /** Installer package names that count as "came from Google Play". */
-    val playStoreInstallers: Set<String> = setOf(
-        "com.android.vending",
-        "com.google.android.feedback"
+    /** Installer package names that count as a vetted app store. */
+    val trustedStoreInstallers: Set<String> = setOf(
+        "com.android.vending",            // Google Play
+        "com.google.android.feedback",    // Play (legacy)
+        "com.sec.android.app.samsungapps", // Samsung Galaxy Store
+        "com.amazon.venezia",             // Amazon Appstore
+        "com.huawei.appmarket",           // Huawei AppGallery
+        "org.fdroid.fdroid"               // F-Droid
+    )
+
+    /** Package name prefixes that indicate an OEM / platform app, not a user install. */
+    val systemPackagePrefixes: List<String> = listOf(
+        "android", "com.android.", "com.google.android.",
+        "com.samsung.", "com.sec.", "com.samsung.android.",
+        "com.qualcomm.", "com.mediatek.", "com.knox.", "com.sec.android."
     )
 }

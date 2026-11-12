@@ -253,8 +253,33 @@ private fun AppCard(app: ScannedApp) {
                 }
             }
 
-            if (expanded) {
+            Spacer(Modifier.size(10.dp))
+            Text(
+                app.headline,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = color
+            )
+            Spacer(Modifier.size(4.dp))
+            Text(
+                app.verdict,
+                fontSize = 13.sp,
+                lineHeight = 18.sp,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            if (app.flags.isNotEmpty()) {
                 Spacer(Modifier.size(10.dp))
+                Text(
+                    if (expanded) "Hide technical details" else "Show technical details",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            if (expanded) {
+                Spacer(Modifier.size(8.dp))
                 Divider(color = MaterialTheme.colorScheme.surfaceVariant)
                 Spacer(Modifier.size(8.dp))
                 app.flags.forEach { flag ->

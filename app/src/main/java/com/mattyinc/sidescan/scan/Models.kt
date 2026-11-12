@@ -3,7 +3,7 @@ package com.mattyinc.sidescan.scan
 /** Overall verdict for a scanned app, from lowest to highest concern. */
 enum class RiskLevel { SAFE, LOW, MEDIUM, HIGH }
 
-/** A single reason an app was flagged, with the weight it contributed to the score. */
+/** A single supporting signal, with the weight it contributed to the score. */
 data class RiskFlag(
     val id: String,
     val title: String,
@@ -18,7 +18,12 @@ data class ScannedApp(
     val versionName: String?,
     val installerPackage: String?,
     val isSystem: Boolean,
-    val fromPlayStore: Boolean,
+    val fromStore: Boolean,
+    /** One-line reason this app landed where it did (e.g. "Bundles a proxy engine"). */
+    val headline: String,
+    /** Plain-language explanation of why it's concerning (or why it's fine). */
+    val verdict: String,
+    /** Supporting technical signals, shown under "details". */
     val flags: List<RiskFlag>,
     val score: Int,
     val level: RiskLevel

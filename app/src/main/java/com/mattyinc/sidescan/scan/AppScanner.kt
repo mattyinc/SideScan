@@ -29,8 +29,24 @@ class AppScanner(context: Context) {
         }
         return all.filter { pkg ->
             val ai = pkg.applicationInfo ?: return@filter false
-            includeSystem || (ai.flags and ApplicationInfo.FLAG_SYSTEM) == 0
+            includeSystem || !isSystemLike(pkg.packageName, ai)
         }
+    }
+
+    /**
+     * True for OS / OEM apps that shouldn't appear in a user-facing scan. Covers
+     * the normal system flags plus Samsung-style preloads that ship in /data with
+     * no FLAG_SYSTEM: an OEM package name that was not installed from a store.
+     */
+    fun isSystemLike(packageName: String, ai: ApplicationInfo): Boolean {
+        val systemFlag = ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP
+        if ((ai.flags and systemFlag) != 0) return true
+        val oemPrefixed = Signatures.systemPackagePrefixes.any { packageName.startsWith(it) }
+        if (oemPrefixed) {
+            val installer = installerOf(packageName)
+            if (installer == null || installer in Signatures.trustedStoreInstallers) return true
+        }
+        return false
     }
 
     /** The package that installed [packageName], or null if unknown/sideloaded. */
